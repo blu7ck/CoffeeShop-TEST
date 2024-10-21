@@ -1,0 +1,8 @@
+- CRUD fonksiyonlar eklenecek
+- Kullanıcı rolleri belirlenecek
+- Basit bir html ile test edilecek
+- gitignore yapılandırılacak
+---
+- QR entegre edilecek
+- offline online metodlar test edilecek
+- acele edilmeyecek
