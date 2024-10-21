@@ -22,6 +22,7 @@ com\blu4ck\Palm_Coffee\zero\service\FeedbackService.class
 com\blu4ck\Palm_Coffee\one\repository\StockRepository.class
 com\blu4ck\Palm_Coffee\one\model\Stock.class
 com\blu4ck\Palm_Coffee\zero\model\Vote.class
+com\blu4ck\Palm_Coffee\zero\controller\TESTController.class
 com\blu4ck\Palm_Coffee\zero\model\AuthenticationResponse.class
 com\blu4ck\Palm_Coffee\one\model\Product.class
 com\blu4ck\Palm_Coffee\zero\controller\UserController.class

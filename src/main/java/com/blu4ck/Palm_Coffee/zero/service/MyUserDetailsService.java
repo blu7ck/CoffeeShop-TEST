@@ -5,21 +5,36 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import java.util.ArrayList;
+
 
 @Service
 public class MyUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        // Kullanıcıların kimlik doğrulama detayları
         if ("admin".equals(username)) {
-            return new User("admin", new BCryptPasswordEncoder().encode("admin123"), new ArrayList<>());
+            return User.withUsername("admin")
+                    .password(passwordEncoder().encode("admin123"))
+                    .roles("ADMIN")
+                    .build();
         } else if ("cashier".equals(username)) {
-            return new User("cashier", new BCryptPasswordEncoder().encode("cashier123"), new ArrayList<>());
+            return User.withUsername("cashier")
+                    .password(passwordEncoder().encode("cashier123"))
+                    .roles("CASHIER")
+                    .build();
+        } else if ("guest".equals(username)) {
+            return User.withUsername("guest")
+                    .password(passwordEncoder().encode("guest123"))
+                    .roles("GUEST")
+                    .build();
         } else {
-            throw new UsernameNotFoundException("Kullanıcı bulunamadı");
+            throw new UsernameNotFoundException("Kullanıcı bulunamadı: " + username);
         }
+    }
+
+    private PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 }

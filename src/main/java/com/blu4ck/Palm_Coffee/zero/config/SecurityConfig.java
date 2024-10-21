@@ -11,7 +11,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.config.http.SessionCreationPolicy;
 
 @Configuration
 public class SecurityConfig {
@@ -24,18 +23,17 @@ public class SecurityConfig {
         this.myUserDetailsService = myUserDetailsService;
     }
 
-    // Güvenlik filtre zincirini tanımlıyoruz
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-                .csrf(csrf -> csrf.disable()) // CSRF korumasını devre dışı bırak
+        http.csrf(csrf -> csrf.disable()) // CSRF'yi devre dışı bırakıyoruz
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/authenticate", "/vote/**", "/feedback/**").permitAll() // Giriş ve anonim işlemler serbest
-                        .requestMatchers("/admin/**").hasRole("ADMIN") // Yönetici erişimi
-                        .anyRequest().authenticated() // Diğer tüm istekler doğrulanmış kullanıcılar için
+                        .requestMatchers("/authenticate", "/vote/**", "/feedback/**").permitAll() // Guest/Anonim işlemler
+                        .requestMatchers("/cash/**").hasRole("CASHIER") // Sadece Cashier
+                        .requestMatchers("/admin/**").hasRole("ADMIN") // Sadece Admin
+                        .anyRequest().authenticated() // Diğer istekler için doğrulama zorunlu
                 )
-                .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // Stateless oturum yönetimi
+                .securityContext(securityContext -> securityContext
+                        .requireExplicitSave(false) // Stateless yapı, session yok
                 );
 
         // JWT filtreleme ekleniyor
@@ -44,13 +42,11 @@ public class SecurityConfig {
         return http.build();
     }
 
-    // Password encoder (şifreleme için)
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
-    // AuthenticationManager Bean
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();

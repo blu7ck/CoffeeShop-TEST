@@ -31,6 +31,8 @@
     </properties>
 
     <dependencies>
+
+
         <dependency>
             <groupId>org.hibernate.orm</groupId>
             <artifactId>hibernate-community-dialects</artifactId>

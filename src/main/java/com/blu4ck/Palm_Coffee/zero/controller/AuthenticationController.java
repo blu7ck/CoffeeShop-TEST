@@ -20,12 +20,10 @@ public class AuthenticationController {
 
     @PostMapping("/authenticate")
     public AuthenticationResponse createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) throws AuthenticationException {
-        // Kimlik doğrulama
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername(), authenticationRequest.getPassword())
         );
 
-        // JWT token oluşturma
         final String jwt = jwtTokenUtil.generateToken(authenticationRequest.getUsername());
 
         return new AuthenticationResponse(jwt);
